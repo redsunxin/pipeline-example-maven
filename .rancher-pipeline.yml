@@ -2,7 +2,7 @@ stages:
 - name: Build
   steps:
   - runScriptConfig:
-      image: maven:3-jdk-7
+      image: loongson.harbor.cn/loongnix/maven:3-openjdk-8
       shellScript: |-
         mvn clean install
 - name: Publish
@@ -10,7 +10,15 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
-      tag: example-greenhouse:${CICD_EXECUTION_SEQUENCE}
+      tag: loongnix/example-greenhouse:${CICD_EXECUTION_SEQUENCE}
+      pushRemote: true
+      registry: loongson.harbor.cn
+    env:
+      PLUGIN_DEBUG: "true"
+      PLUGIN_INSECURE: "true"
+      PLUGIN_PASSWORD: admin
+      PLUGIN_REGISTRY: loongson.harbor.cn
+      PLUGIN_USERNAME: admin
 - name: Deploy
   steps:
   - applyYamlConfig:
